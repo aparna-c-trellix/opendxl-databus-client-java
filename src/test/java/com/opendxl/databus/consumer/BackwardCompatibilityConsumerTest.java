@@ -5,7 +5,7 @@
 package com.opendxl.databus.consumer;
 
 import broker.ClusterHelper;
-
+import org.junit.Assert;
 import com.opendxl.databus.util.Constants;
 import com.opendxl.databus.util.ConsumerHelper;
 import com.opendxl.databus.util.Topic;

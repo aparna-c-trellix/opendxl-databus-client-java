@@ -33,7 +33,7 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
-import java.time.Duration;
+
 import java.time.temporal.TemporalUnit;
 
 /**
@@ -472,15 +472,16 @@ public abstract class Producer<P> {
      *                                       <p> InterruptException       If the thread is interrupted while blocked
      *                                       <p> IllegalArgumentException If the <code>timeout</code> is negative.
      */
-    public void close(final long timeout, final TemporalUnit timeUnit) {
-        try {
-            producer.close(Duration.of(timeout, timeUnit));
-        } catch (Exception e) {
+    // public void close(final long timeout, final TemporalUnit timeUnit) {
+    //     try {
+    //         producer.close(Duration.of(timeout, timeUnit));
+    //     } catch (Exception e) {
     /**
-     * Set the DatabusKeySerializer in producer
-     *
-     * @param keySerializer A DatabusKeySerializer Instance
-     */
+    //  * Set the DatabusKeySerializer in producer
+    //  *
+    //  * @param keySerializer A DatabusKeySerializer Instance
+    //  */
+
     protected void setKeySerializer(final DatabusKeySerializer keySerializer) {
         this.keySerializer = keySerializer;
     }
