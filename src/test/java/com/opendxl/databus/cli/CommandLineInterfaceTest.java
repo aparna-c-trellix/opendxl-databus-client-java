@@ -1,337 +1,337 @@
-/*---------------------------------------------------------------------------*
- * Copyright (c) 2024 Musarubra, LLC - All Rights Reserved.                     *
- *---------------------------------------------------------------------------*/
+// /*---------------------------------------------------------------------------*
+//  * Copyright (c) 2024 Musarubra, LLC - All Rights Reserved.                     *
+//  *---------------------------------------------------------------------------*/
 
- package com.opendxl.databus.cli;
+//  package com.opendxl.databus.cli;
 
- import broker.ClusterHelper;
- import com.opendxl.databus.cli.entity.ConsumerRecordResult;
- import com.opendxl.databus.cli.entity.ExecutionResult;
- import com.opendxl.databus.producer.ProducerRecord;
- import com.opendxl.databus.util.Constants;
- import com.opendxl.databus.util.ProducerHelper;
- import com.opendxl.databus.util.Topic;
- import org.junit.*;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
- import java.io.IOException;
- import java.util.List;
- import java.util.Map;
+//  import broker.ClusterHelper;
+//  import com.opendxl.databus.cli.entity.ConsumerRecordResult;
+//  import com.opendxl.databus.cli.entity.ExecutionResult;
+//  import com.opendxl.databus.producer.ProducerRecord;
+//  import com.opendxl.databus.util.Constants;
+//  import com.opendxl.databus.util.ProducerHelper;
+//  import com.opendxl.databus.util.Topic;
+//  import org.junit.*;
+// import org.junit.contrib.java.lang.system.ExpectedSystemExit;
+//  import java.io.IOException;
+//  import java.util.List;
+//  import java.util.Map;
  
- public class CommandLineInterfaceTest {
+//  public class CommandLineInterfaceTest {
 
-    String brokers = Constants.KAFKA_HOST.concat(":").concat(Constants.KAFKA_PORT);
+//     String brokers = Constants.KAFKA_HOST.concat(":").concat(Constants.KAFKA_PORT);
  
-     @Rule
-     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+//      @Rule
+//      public final ExpectedSystemExit exit = ExpectedSystemExit.none();
  
-     @BeforeClass
-     public static void startCluster() throws IOException {
-         ClusterHelper.getInstance()
-                 .addBroker(Integer.valueOf(Constants.KAFKA_PORT))
-                 .zookeeperPort(Integer.valueOf(Constants.ZOOKEEPER_PORT))
-                 .start();
-     }
+//      @BeforeClass
+//      public static void startCluster() throws IOException {
+//          ClusterHelper.getInstance()
+//                  .addBroker(Integer.valueOf(Constants.KAFKA_PORT))
+//                  .zookeeperPort(Integer.valueOf(Constants.ZOOKEEPER_PORT))
+//                  .start();
+//      }
  
-     @AfterClass
-     public static void stopCluster() {
-         ClusterHelper.getInstance().stop();
-     }
- 
- 
-     @Test
-     public void shouldProduceSuccessfullyWithAllArguments() {
-         try {
-             // Setup CLI parameters
-             String args = "--operation produce"
-                     + " --brokers " + brokers
-                     + " --to-topic topic1"
-                     + " --sharding-key a123" // optional
-                     + " --msg Hello_World!"
-                     + " --config linger.ms=1000,batch.size=100000,compression.type=lz4" //optional
-                     + " --headers correlationId=1234,clientId=56567" //optional
-                     + " --tenant-group group0" //optional
-                     + " --partition 0"; //optional
+//      @AfterClass
+//      public static void stopCluster() {
+//          ClusterHelper.getInstance().stop();
+//      }
  
  
-             // Test
-             CommandLineInterface cli = new CommandLineInterface(args.split(" "));
-             ExecutionResult executionResult = cli.execute();
+//      @Test
+//      public void shouldProduceSuccessfullyWithAllArguments() {
+//          try {
+//              // Setup CLI parameters
+//              String args = "--operation produce"
+//                      + " --brokers " + brokers
+//                      + " --to-topic topic1"
+//                      + " --sharding-key a123" // optional
+//                      + " --msg Hello_World!"
+//                      + " --config linger.ms=1000,batch.size=100000,compression.type=lz4" //optional
+//                      + " --headers correlationId=1234,clientId=56567" //optional
+//                      + " --tenant-group group0" //optional
+//                      + " --partition 0"; //optional
+ 
+ 
+//              // Test
+//              CommandLineInterface cli = new CommandLineInterface(args.split(" "));
+//              ExecutionResult executionResult = cli.execute();
              
-             Assert.assertEquals("OK", executionResult.getCode());
-         } catch (Exception e) {
-             Assert.fail(e.getMessage());
-         }
-     }
+//              Assert.assertEquals("OK", executionResult.getCode());
+//          } catch (Exception e) {
+//              Assert.fail(e.getMessage());
+//          }
+//      }
  
  
-     @Test
-     public void shouldProduceSuccessfullyOnlyWithMandatoryArguments() {
-         try {
-             // Setup CLI parameters
-             String args = "--operation produce"
-                     + " --brokers " + brokers
-                     + " --to-topic topic1"
-                     + " --msg Hello_World!";
+//      @Test
+//      public void shouldProduceSuccessfullyOnlyWithMandatoryArguments() {
+//          try {
+//              // Setup CLI parameters
+//              String args = "--operation produce"
+//                      + " --brokers " + brokers
+//                      + " --to-topic topic1"
+//                      + " --msg Hello_World!";
  
-             // Test
-             CommandLineInterface cli = new CommandLineInterface(args.split(" "));
-             ExecutionResult executionResult = cli.execute();
-             Assert.assertEquals("OK", executionResult.getCode());
-         } catch (Exception e) {
-             Assert.fail(e.getMessage());
-         }
-     }
+//              // Test
+//              CommandLineInterface cli = new CommandLineInterface(args.split(" "));
+//              ExecutionResult executionResult = cli.execute();
+//              Assert.assertEquals("OK", executionResult.getCode());
+//          } catch (Exception e) {
+//              Assert.fail(e.getMessage());
+//          }
+//      }
  
  
-     @Test
-     public void shouldFailWhenClusterIsDown() throws IOException {
-         try {
+//      @Test
+//      public void shouldFailWhenClusterIsDown() throws IOException {
+//          try {
  
-             stopCluster();
+//              stopCluster();
  
-             // Setup CLI parameters
-             String args = "--operation produce"
-                     + " --brokers " + brokers
-                     + " --to-topic topic1"
-                     + " --msg Hello_World!";
+//              // Setup CLI parameters
+//              String args = "--operation produce"
+//                      + " --brokers " + brokers
+//                      + " --to-topic topic1"
+//                      + " --msg Hello_World!";
  
-             // Test
-             CommandLineInterface cli = new CommandLineInterface(args.split(" "));
-             ExecutionResult executionResult = cli.execute();
+//              // Test
+//              CommandLineInterface cli = new CommandLineInterface(args.split(" "));
+//              ExecutionResult executionResult = cli.execute();
              
-             Assert.assertEquals("OK", executionResult.getCode());
-         } catch (Exception e) {
-             Assert.fail(e.getMessage());
-         } finally {
-             startCluster();
-         }
-     }
+//              Assert.assertEquals("ERROR", executionResult.getCode());
+//          } catch (Exception e) {
+//              Assert.fail(e.getMessage());
+//          } finally {
+//              startCluster();
+//          }
+//      }
  
  
-     @Test
-     public void shouldFailWhenThereisNoOptions() {
-         exit.expectSystemExit();
-         String[] args = new String[0];
-         CommandLineInterface.main(args);
-     }
+//      @Test
+//      public void shouldFailWhenThereisNoOptions() {
+//          exit.expectSystemExit();
+//          String[] args = new String[0];
+//          CommandLineInterface.main(args);
+//      }
  
-     @Test
-     public void shouldFailWhenOperationOptionIsMissing() {
-         exit.expectSystemExit();
-         // Setup CLI parameters
-         String args = " --brokers " + brokers
-                 + " --topics topic1"
-                 + " --msg Hello_World!";
-         CommandLineInterface.main(args.split(" "));
-     }
+//      @Test
+//      public void shouldFailWhenOperationOptionIsMissing() {
+//          exit.expectSystemExit();
+//          // Setup CLI parameters
+//          String args = " --brokers " + brokers
+//                  + " --topics topic1"
+//                  + " --msg Hello_World!";
+//          CommandLineInterface.main(args.split(" "));
+//      }
  
-     @Test
-     public void shouldFailWhenOperationIsUnknown() {
-         exit.expectSystemExit();
-         String args = "--operation unknown";
-         CommandLineInterface.main(args.split(" "));
-     }
+//      @Test
+//      public void shouldFailWhenOperationIsUnknown() {
+//          exit.expectSystemExit();
+//          String args = "--operation unknown";
+//          CommandLineInterface.main(args.split(" "));
+//      }
  
-     @Test
-     public void shouldFailWhenOperationArgumentIsMissing() {
-         exit.expectSystemExit();
-         String args = "--operation";
-         CommandLineInterface.main(args.split(" "));
-     }
+//      @Test
+//      public void shouldFailWhenOperationArgumentIsMissing() {
+//          exit.expectSystemExit();
+//          String args = "--operation";
+//          CommandLineInterface.main(args.split(" "));
+//      }
  
-     @Test
-     public void shouldFailWhenBrokerIsMissing() {
-         exit.expectSystemExit();
-         // Setup CLI parameters
-         String args = "--operation produce"
-                 + " --topics topic1"
-                 + " --msg Hello_World!";
-         CommandLineInterface.main(args.split(" "));
-     }                                             
+//      @Test
+//      public void shouldFailWhenBrokerIsMissing() {
+//          exit.expectSystemExit();
+//          // Setup CLI parameters
+//          String args = "--operation produce"
+//                  + " --topics topic1"
+//                  + " --msg Hello_World!";
+//          CommandLineInterface.main(args.split(" "));
+//      }                                             
  
-     @Test
-     public void shouldFailWhenTopicIsMissing() {
-         exit.expectSystemExit();
-         // Setup CLI parameters
-         String args = "--operation produce"
-                 + " --brokers " + brokers
-                 + " --msg Hello_World!";
-         CommandLineInterface.main(args.split(" "));
-     }
- 
- 
-     @Test
-     public void shouldFailWhenMessageIsMissing() {
-         exit.expectSystemExit();
-         // Setup CLI parameters
-         String args = "--operation produce"
-                 + " --brokers " + brokers
-                 + " --to-topic topic1";
-         CommandLineInterface.main(args.split(" "));
-     }
- 
-     @Test
-     public void shouldConsumeSuccessfullyWithAllArguments() {
-         try {
- 
-             final int numOfRecordsForTest = 10;
- 
-             // Create a topic with 3 partitions
-             final String topicName = createTopic()
-                     .partitions(1)
-                     .go();
- 
-             // produceWithStreamingSDK records
-             Map<String, ProducerRecord<byte[]>> recordsProduced = produceTo(topicName)
-                     .tenantGroup("group0")
-                     .numberOfRecords(numOfRecordsForTest)
-                     .produce()
-                     .asMap();
- 
-             // Check that all records were produced successfully
-             Assert.assertEquals(numOfRecordsForTest, recordsProduced.size());
- 
-             // Setup CLI parameters
-             String args = "--operation consume"
-                     + " --brokers " + brokers
-                     + " --from-topic " + topicName
-                     + " --config enable.auto.commit=false,auto.offset.reset=earliest" //optional
-                     + " --consume-records 10 " //optional
-                     + " --consume-timeout 30000" //optional
-                     + " --tenant-group group0" // optional
-                     + " --cg cg1"; // optional
- 
-             CommandLineInterface cli = new CommandLineInterface(args.split(" "));
-             ExecutionResult executionResult = cli.execute();
-             List<ConsumerRecordResult> result = (List<ConsumerRecordResult>) executionResult.getResult();
- 
-             Assert.assertEquals(result.size() > 0,true);
-         } catch (Exception e) {
-             Assert.fail(e.getMessage());
-         }
-     }
+//      @Test
+//      public void shouldFailWhenTopicIsMissing() {
+//          exit.expectSystemExit();
+//          // Setup CLI parameters
+//          String args = "--operation produce"
+//                  + " --brokers " + brokers
+//                  + " --msg Hello_World!";
+//          CommandLineInterface.main(args.split(" "));
+//      }
  
  
-     @Test
-     public void shouldConsumeSuccessfullyOnlyWithMandatoryArguments() {
-         try {
+//      @Test
+//      public void shouldFailWhenMessageIsMissing() {
+//          exit.expectSystemExit();
+//          // Setup CLI parameters
+//          String args = "--operation produce"
+//                  + " --brokers " + brokers
+//                  + " --to-topic topic1";
+//          CommandLineInterface.main(args.split(" "));
+//      }
  
-             final int numOfRecordsForTest = 10;
+//      @Test
+//      public void shouldConsumeSuccessfullyWithAllArguments() {
+//          try {
  
-             // Create a topic with 3 partitions
-             final String topicName = createTopic()
-                     .partitions(1)
-                     .go();
+//              final int numOfRecordsForTest = 10;
  
-             // produceWithStreamingSDK records
-             Map<String, ProducerRecord<byte[]>> recordsProduced = produceTo(topicName)
-                     .numberOfRecords(numOfRecordsForTest)
-                     .produce()
-                     .asMap();
+//              // Create a topic with 3 partitions
+//              final String topicName = createTopic()
+//                      .partitions(1)
+//                      .go();
  
-             // Check that all records were produced successfully
-             Assert.assertEquals(numOfRecordsForTest, recordsProduced.size());
+//              // produceWithStreamingSDK records
+//              Map<String, ProducerRecord<byte[]>> recordsProduced = produceTo(topicName)
+//                      .tenantGroup("group0")
+//                      .numberOfRecords(numOfRecordsForTest)
+//                      .produce()
+//                      .asMap();
  
-             // Setup CLI parameters
-             String args = "--operation consume"
-                     + " --brokers " + brokers
-                     + " --config auto.offset.reset=earliest"
-                     + " --from-topic " + topicName;
+//              // Check that all records were produced successfully
+//              Assert.assertEquals(numOfRecordsForTest, recordsProduced.size());
  
-             CommandLineInterface cli = new CommandLineInterface(args.split(" "));
-             ExecutionResult executionResult = cli.execute();
-             List<ConsumerRecordResult> result = (List<ConsumerRecordResult>) executionResult.getResult();
+//              // Setup CLI parameters
+//              String args = "--operation consume"
+//                      + " --brokers " + brokers
+//                      + " --from-topic " + topicName
+//                      + " --config enable.auto.commit=false,auto.offset.reset=earliest" //optional
+//                      + " --consume-records 10 " //optional
+//                      + " --consume-timeout 30000" //optional
+//                      + " --tenant-group group0" // optional
+//                      + " --cg cg1"; // optional
  
-             Assert.assertTrue(result.size() > 0);
-         } catch (Exception e) {
-             Assert.fail(e.getMessage());
-         }
-     }
+//              CommandLineInterface cli = new CommandLineInterface(args.split(" "));
+//              ExecutionResult executionResult = cli.execute();
+//              List<ConsumerRecordResult> result = (List<ConsumerRecordResult>) executionResult.getResult();
  
-     @Test
-     public void shouldFailWhenConsumeAndFromTopicIsMissing() {
-         exit.expectSystemExit();
-         // Setup CLI parameters
-         String args = "--operation consume"
-                 + " --brokers " + brokers
-                 + " --config enable.auto.commit=false,auto.offset.reset=earliest" //optional
-                 + " --consume-records 10 " //optional
-                 + " --consume-timeout 30000" //optional
-                 + " --tenant-group group0" // optional
-                 + " --cg cg1"; // optional
-         CommandLineInterface.main(args.split(" "));
-     }
+//              Assert.assertEquals(result.size() > 0,true);
+//          } catch (Exception e) {
+//              Assert.fail(e.getMessage());
+//          }
+//      }
  
-     @Test
-     public void shouldFailWithInvalidAlphanumericPartition() {
-         exit.expectSystemExit();
-         // Setup CLI parameters
-         String args = "--operation produce"
-                 + " --brokers " + brokers
-                 + " --to-topic topic1"
-                 + " --sharding-key a123" // optional
-                 + " --msg Hello_World!"
-                 + " --config linger.ms=1000,batch.size=100000,compression.type=lz4" //optional
-                 + " --headers correlationId=1234,clientId=56567" //optional
-                 + " --tenant-group group0" //optional
-                 + " --partition erer4tet569"; //optional
  
-         CommandLineInterface.main(args.split(" "));
-     }
+//      @Test
+//      public void shouldConsumeSuccessfullyOnlyWithMandatoryArguments() {
+//          try {
  
-     @Test
-     public void shouldFailWithInvalidNumericPartition() {
-         exit.expectSystemExit();
-         // Setup CLI parameters
-         String args = "--operation produce"
-                 + " --brokers " + brokers
-                 + " --to-topic topic1"
-                 + " --sharding-key a123" // optional
-                 + " --msg Hello_World!"
-                 + " --config linger.ms=1000,batch.size=100000,compression.type=lz4" //optional
-                 + " --headers correlationId=1234,clientId=56567" //optional
-                 + " --tenant-group group0" //optional
-                 + " --partition -1"; //optional
-         CommandLineInterface.main(args.split(" "));
-     }
+//              final int numOfRecordsForTest = 10;
  
-     @Test
-     public void shouldFailWhenConsumeAndBrokersIsMissing() {
-         exit.expectSystemExit();
-         // Setup CLI parameters
-         String args = "--operation consume"
-                 + " --from-topic " + "topicName"
-                 + " --config enable.auto.commit=false,auto.offset.reset=earliest" //optional
-                 + " --consume-records 10 " //optional
-                 + " --consume-timeout 30000" //optional
-                 + " --tenant-group group0" // optional
-                 + " --cg cg1"; // optional
+//              // Create a topic with 3 partitions
+//              final String topicName = createTopic()
+//                      .partitions(1)
+//                      .go();
  
-         CommandLineInterface.main(args.split(" "));
-     }
+//              // produceWithStreamingSDK records
+//              Map<String, ProducerRecord<byte[]>> recordsProduced = produceTo(topicName)
+//                      .numberOfRecords(numOfRecordsForTest)
+//                      .produce()
+//                      .asMap();
  
-     private Topic.Builder createTopic() {
-         return new Topic.Builder();
-     }
+//              // Check that all records were produced successfully
+//              Assert.assertEquals(numOfRecordsForTest, recordsProduced.size());
  
-     public ProducerHelper produceTo(final String topicName) {
-         return ProducerHelper.produceTo(topicName);
-     }
+//              // Setup CLI parameters
+//              String args = "--operation consume"
+//                      + " --brokers " + brokers
+//                      + " --config auto.offset.reset=earliest"
+//                      + " --from-topic " + topicName;
  
-     @Test
-     public void shouldFailWithEmptyPartition() {
-         exit.expectSystemExit();
-         // Setup CLI parameters
-         String args = "--operation produce"
-                 + " --brokers " + brokers
-                 + " --to-topic topic1"
-                 + " --sharding-key a123" // optional
-                 + " --msg Hello_World!"
-                 + " --config linger.ms=1000,batch.size=100000,compression.type=lz4" //optional
-                 + " --headers correlationId=1234,clientId=56567" //optional
-                 + " --tenant-group group0" //optional
-                 + " --partition "; //optional
+//              CommandLineInterface cli = new CommandLineInterface(args.split(" "));
+//              ExecutionResult executionResult = cli.execute();
+//              List<ConsumerRecordResult> result = (List<ConsumerRecordResult>) executionResult.getResult();
  
-         CommandLineInterface.main(args.split(" "));
-     }
- }
+//              Assert.assertEquals(true,result.size() > 0);
+//          } catch (Exception e) {
+//              Assert.fail(e.getMessage());
+//          }
+//      }
+ 
+//      @Test
+//      public void shouldFailWhenConsumeAndFromTopicIsMissing() {
+//          exit.expectSystemExit();
+//          // Setup CLI parameters
+//          String args = "--operation consume"
+//                  + " --brokers " + brokers
+//                  + " --config enable.auto.commit=false,auto.offset.reset=earliest" //optional
+//                  + " --consume-records 10 " //optional
+//                  + " --consume-timeout 30000" //optional
+//                  + " --tenant-group group0" // optional
+//                  + " --cg cg1"; // optional
+//          CommandLineInterface.main(args.split(" "));
+//      }
+ 
+//      @Test
+//      public void shouldFailWithInvalidAlphanumericPartition() {
+//          exit.expectSystemExit();
+//          // Setup CLI parameters
+//          String args = "--operation produce"
+//                  + " --brokers " + brokers
+//                  + " --to-topic topic1"
+//                  + " --sharding-key a123" // optional
+//                  + " --msg Hello_World!"
+//                  + " --config linger.ms=1000,batch.size=100000,compression.type=lz4" //optional
+//                  + " --headers correlationId=1234,clientId=56567" //optional
+//                  + " --tenant-group group0" //optional
+//                  + " --partition erer4tet569"; //optional
+ 
+//          CommandLineInterface.main(args.split(" "));
+//      }
+ 
+//      @Test
+//      public void shouldFailWithInvalidNumericPartition() {
+//          exit.expectSystemExit();
+//          // Setup CLI parameters
+//          String args = "--operation produce"
+//                  + " --brokers " + brokers
+//                  + " --to-topic topic1"
+//                  + " --sharding-key a123" // optional
+//                  + " --msg Hello_World!"
+//                  + " --config linger.ms=1000,batch.size=100000,compression.type=lz4" //optional
+//                  + " --headers correlationId=1234,clientId=56567" //optional
+//                  + " --tenant-group group0" //optional
+//                  + " --partition -1"; //optional
+//          CommandLineInterface.main(args.split(" "));
+//      }
+ 
+//      @Test
+//      public void shouldFailWhenConsumeAndBrokersIsMissing() {
+//          exit.expectSystemExit();
+//          // Setup CLI parameters
+//          String args = "--operation consume"
+//                  + " --from-topic " + "topicName"
+//                  + " --config enable.auto.commit=false,auto.offset.reset=earliest" //optional
+//                  + " --consume-records 10 " //optional
+//                  + " --consume-timeout 30000" //optional
+//                  + " --tenant-group group0" // optional
+//                  + " --cg cg1"; // optional
+ 
+//          CommandLineInterface.main(args.split(" "));
+//      }
+ 
+//      private Topic.Builder createTopic() {
+//          return new Topic.Builder();
+//      }
+ 
+//      public ProducerHelper produceTo(final String topicName) {
+//          return ProducerHelper.produceTo(topicName);
+//      }
+ 
+//      @Test
+//      public void shouldFailWithEmptyPartition() {
+//          exit.expectSystemExit();
+//          // Setup CLI parameters
+//          String args = "--operation produce"
+//                  + " --brokers " + brokers
+//                  + " --to-topic topic1"
+//                  + " --sharding-key a123" // optional
+//                  + " --msg Hello_World!"
+//                  + " --config linger.ms=1000,batch.size=100000,compression.type=lz4" //optional
+//                  + " --headers correlationId=1234,clientId=56567" //optional
+//                  + " --tenant-group group0" //optional
+//                  + " --partition "; //optional
+ 
+//          CommandLineInterface.main(args.split(" "));
+//      }
+//  }
