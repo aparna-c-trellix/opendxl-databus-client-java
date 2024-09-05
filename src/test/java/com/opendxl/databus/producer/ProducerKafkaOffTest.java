@@ -30,7 +30,7 @@ public class ProducerKafkaOffTest {
 
         countDownLatch.await();
         // Callbacks fails with exception
-        Assert.assertTrue((testCallback.isSuccess()));
+        Assert.assertFalse((testCallback.isSuccess()));
         } catch (InterruptedException e) {
             Assert.fail(e.getMessage());
         }

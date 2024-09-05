@@ -3,12 +3,10 @@
  *---------------------------------------------------------------------------*/
 
 package broker;
-
-import kafka.admin.TopicCommand;
-import kafka.admin.TopicCommand.TopicService;
 import kafka.zk.KafkaZkClient;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.DescribeClusterResult;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.Node;
 import org.apache.kafka.common.security.JaasUtils;
@@ -18,6 +16,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,30 +47,30 @@ public class ClusterHelper {
         return clusterHelper;
     }
 
-    public void addNewKafkaTopic(final String topicName, final int replicationFactor, final
+    public void addNewKafkaTopic(final String topicName, final short replicationFactor, final
     int partitions) throws Exception {
-        String[] arguments = {
-            "--create",
-            "--bootstrap-server", KAFKAHOST.concat(":").concat(String.valueOf(kafkaPort)),
-            "--replication-factor", String.valueOf(replicationFactor),
-            "--partitions", String.valueOf(partitions),
-            "--topic", topicName
-        };
-
-        TopicCommand.TopicCommandOptions opts = new TopicCommand.TopicCommandOptions(arguments);
-        TopicService topicService=null;
+        AdminClient adminClient = null;
         try {
-            final AdminClient adminClient = createAdminClient();
-            topicService = new TopicCommand.TopicService(adminClient);
-            topicService.createTopic(opts);
-        } catch (Exception e) {
-            // In case of exceptions, abort topic creation.
-            throw new Exception("Error creating a new Kafka topic");
-        }finally{
-            if (topicService!=null) {
-                topicService.close();
+            // Create an AdminClient instance
+            adminClient = createAdminClient();
+
+            // Define the new topic with specified configurations
+            NewTopic newTopic = new NewTopic(topicName, partitions, replicationFactor);
+
+            // Create the topic
+            adminClient.createTopics(Collections.singleton(newTopic)).all().get();
+
+            System.out.println("Topic created successfully.");
+        }
+        catch (ExecutionException | InterruptedException e) {
+            System.err.println("Error creating the Kafka topic: " + e.getMessage());
+            throw new RuntimeException("Error creating a new Kafka topic", e);
+        } finally {
+            if (adminClient != null) {
+                adminClient.close();
             }
         }
+        
     }
 
     public AdminClient createAdminClient() {
@@ -182,8 +181,8 @@ public class ClusterHelper {
 
         return nodes;
     }
-
-    private KafkaZkClient getZkClient(TopicCommand.TopicCommandOptions opts) {
+    final String connectString = "";
+    private KafkaZkClient getZkClient(AdminClient adminClient) {
         final String connectString = "";
 
         return KafkaZkClient.apply(connectString,
@@ -192,9 +191,9 @@ public class ClusterHelper {
                 CONNECTION_TIMEOUT_MS,
                 MAX_IN_FLIGHT_REQUESTS,
                 new SystemTime(),
-                "", null,
+                "", new org.apache.zookeeper.client.ZKClientConfig(),
                 METRIC_GROUP,
-                METRIC_TYPE, false);
+                METRIC_TYPE, false,false);
     }
 
 }
