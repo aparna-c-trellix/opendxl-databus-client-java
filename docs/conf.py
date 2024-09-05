@@ -12,13 +12,13 @@ version = VERSION
 release = VERSION
 
 # General options
-#needs_sphinx = '1.0'
+needs_sphinx = '1.0'
 master_doc = 'index'
 pygments_style = 'tango'
 add_function_parentheses = True
 
-# extensions = ['sphinx.ext.autodoc', 'javasphinx',
-#               'sphinxcontrib.plantuml']
+extensions = ['sphinx.ext.autodoc', 'javasphinx',
+              'sphinxcontrib.plantuml']
 #'sphinxcontrib-inlinesyntaxhighlight',
 templates_path = ['_templates']
 exclude_trees = ['.build']
